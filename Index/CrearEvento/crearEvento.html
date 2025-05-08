@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crear Evento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="crearEvento.css">
+</head>
+
+<body>
+    <form id="crear-evento-form">
+        <div class="contenedor">
+            <h1>Crear evento</h1>
+
+            <label for="Nombre_Evento">Nombre del evento:</label>
+            <input type="text" id="Nombre_Evento" placeholder="Nombre del evento" required>
+
+            <label for="fecha">Fecha:</label>
+            <div class="doble">
+                <input type="date" id="fecha" required>
+
+                <label for="hora">Hora:</label>
+                <div class="doble">
+                    <input type="time" id="hora" required>
+                </div>
+
+                <label>Ubicación:</label>
+                <input type="text" id="Ubicacion" placeholder="Dirección del evento" required>
+
+                <label for="Descripcion">Descripción:</label>
+                <textarea id="Descripcion" rows="3" placeholder="Descripción del evento..."></textarea>
+
+                <div class="acciones">
+                    <button type="button" onclick="window.location.href='../Eventos/Eventos.html'">Regresar</button>
+                    <button type="button" onclick="window.location.href='../Canciones/canciones.html'">Agregar canciones</button>
+                    <button type="submit">Crear</button>
+                </div>
+            </div>
+    </form>
+
+
+    <script src="crearEvento.js"></script>
+</body>
+
+</html>

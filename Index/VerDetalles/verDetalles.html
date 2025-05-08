@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Detalles del Evento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="verDetalles.css">
+    <link href="verDetalles.css" rel="stylesheet">
+</head>
+
+<body>
+    <form id="detalles-evento-form">
+        <div class="contenedor">
+            <h1>Detalles</h1>
+
+            <label for="Nombre_Evento">Nombre del evento:</label>
+            <input type="text" id="Nombre_Evento" placeholder="Nombre del evento" disabled required>
+
+            <label for="fecha">Fecha:</label>
+            <div class="doble">
+                <input type="date" id="fecha" disabled required>
+
+                <label for="hora">Hora:</label>
+                <div class="doble">
+                    <input type="time" id="hora" disabled required>
+                </div>
+
+                <label>Ubicación:</label>
+                <input type="text" id="Ubicacion" placeholder="Dirección del evento" disabled required>
+
+                <label for="Descripcion">Descripción:</label>
+                <textarea id="Descripcion" rows="3" placeholder="Descripción del evento..." disabled></textarea>
+
+                <div class="acciones">
+                    <button type="button" onclick="window.location.href='../Eventos/Eventos.html'"
+                        id="regresar-btn">Regresar</button>
+                    <button type="button" id="editar-btn">Editar</button>
+                    <button type="button" id="eliminar-btn">Borrar</button>
+                    <button type="button" id="cancelar-btn" style="display: none;">Cancelar</button>
+                    <button type="submit" id="guardar-btn" style="display: none;">Guardar</button>
+                </div>
+            </div>
+    </form>
+
+    <script src="verDetalles.js"></script>
+</body>
+
+</html>
