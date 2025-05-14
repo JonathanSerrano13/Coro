@@ -24,6 +24,7 @@ h1 {
     display: flex;
     margin-bottom: 25px;
     gap: 5px;
+    justify-content: space-between;
 }
 
 .buscar-canciones input {

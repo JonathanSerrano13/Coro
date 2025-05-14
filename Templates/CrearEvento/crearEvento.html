@@ -30,32 +30,16 @@
             <label for="descripcion">Descripción:</label>
             <textarea id="descripcion" name="descripcion" rows="3" placeholder="Descripción del evento..."></textarea>
 
-            <input type="hidden" name="id_lista" value="{{ session.get('temp_lista_id', 0) }}">
-            
                 <div class="acciones">
-                    <button type="button" id="cancelarEvento" onclick="window.location.href='{{ url_for('eventos') }}'">Regresar</button>
-                    <button type="button" onclick="window.location.href='{{ url_for('lista_canciones', temp_lista_id=session.get("temp_lista_id", 0)) }}'">Canciones</button>
+                    <button type="button" onclick="window.location.href='{{ url_for('eventos') }}'">Regresar</button>
+                    <button type="button" onclick="window.location.href='{{ url_for('lista_canciones') }}'">Canciones</button>
                     <button type="submit">Crear</button>
                 </div>
             </div>
     </form>
 
 
-    <script>
-        document.getElementById('cancelarEvento').addEventListener('click', function () {
-    fetch('/eliminar_listas_temporales', { method: 'POST' })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                console.log('Listas temporales eliminadas.');
-                window.location.href = "{{ url_for('eventos') }}";
-            } else {
-                console.error('Error al eliminar listas temporales.');
-            }
-        })
-        .catch(error => console.error('Error al procesar la solicitud:', error));
-});
-    </script>
+    <script src="crearEvento.js"></script>
 </body>
 
 </html>

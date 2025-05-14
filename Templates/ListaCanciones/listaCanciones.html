@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VLista</title>
+    <title>Ver Canciones</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
     <link rel='stylesheet'
@@ -22,15 +22,14 @@
         <div class="buscar-canciones">
             <button class="btn" onclick="window.location.href='{{ url_for('crearEvento') }}'"><span class="material-symbols-outlined">chevron_left</span></button>
             <button onclick="guardarSeleccion()" class="btn-agregar" ><i class="fi fi-rr-add"></i></button>
-            <button class="btn-canciones-disponibles" onclick="window.location.href='{{ url_for('canciones', temp_lista_id=temp_lista_id) }}'"><i class="fi fi-ss-list-music"></i></button>
+            <button class="btn-canciones-disponibles" onclick="window.location.href='{{ url_for('canciones')}}'"><i class="fi fi-ss-list-music"></i></button>
         </div>
 
         <div class="lista">
             <ul id="lista-canciones">
                 {% for cancion in canciones %}
                 <li class="item">
-                    <input type="checkbox" name="canciones"  value="{{ cancion.id}}">
-                    <label >{{ cancion.nombre }}</label>
+                    <label >{{ cancion[1] }}</label>
                 </li>
                 {% endfor %}
             </ul>

@@ -22,7 +22,7 @@
         <div class="buscar-canciones">
             <button class="btn" onclick="window.location.href='{{ url_for('lista_canciones')}}'"><span class="material-symbols-outlined">chevron_left</span></button>
             <input type="text" id="busqueda" placeholder="Buscar canción">
-            <button type="submit" class="btn-agregar" id="btn-agregar" ><i class="fi fi-rr-add"></i></button>
+            <button type="submit" class="btn-agregar" id="btn-agregar" onclick="window.location.href='{{ url_for('lista_canciones') }}'" ><i class="fi fi-rr-add"></i></button>
         </div>
 
         <div class="lista">
@@ -38,6 +38,8 @@
      </form>   
     </div>
 
-    <script></script>
+    <script src="{{ url_for('static', filename='js/canciones.js') }}"></script>
 
 </body>
+
+</html>
