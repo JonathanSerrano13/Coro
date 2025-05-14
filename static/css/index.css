@@ -80,42 +80,6 @@ h1 {
     background-color: #8c6b62;
 }
 
-.alert-container {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-}
-
-.alert {
-    padding: 15px;
-    border-radius: 5px;
-    font-size: 14px;
-    color: #fff;
-    margin: 10px 0;
-    display: none; /* Inicialmente oculto */
-    transition: opacity 0.5s ease;
-}
-
-.alert-danger {
-    background-color: #f44336;
-}
-
-.alert-success {
-    background-color: #4CAF50;
-}
-
-/* Animación de aparición */
-.alert.show {
-    display: block;
-    opacity: 1;
-}
-
-.alert.hide {
-    opacity: 0;
-    display: none;
-}
 
 @media (max-height: 600px) {
     .contenedor {

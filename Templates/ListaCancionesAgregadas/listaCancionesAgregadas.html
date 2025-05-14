@@ -21,8 +21,7 @@
 
            <div class="buscar-canciones">
             <button class="btn" onclick="window.location.href='{{ url_for('ver_detalles',evento_id=evento_id) }}'"><span class="material-symbols-outlined">chevron_left</span></button>
-            <button onclick="guardarSeleccion()" class="btn-agregar" ><i class="fi fi-rr-add"></i></button>
-            <button class="btn-canciones-disponibles" onclick="window.location.href='{{ url_for('canciones')}}'"><i class="fi fi-ss-list-music"></i></button>
+            <button class="btn-canciones-disponibles" onclick="window.location.href='{{ url_for('canciones',evento_id=evento_id)}}'"><i class="fi fi-ss-list-music"></i></button>
         </div>
 
         <div class="lista">

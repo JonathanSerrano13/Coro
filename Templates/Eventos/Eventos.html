@@ -10,6 +10,7 @@
         href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
     <link rel='stylesheet'
         href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-straight/css/uicons-bold-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-straight/css/uicons-regular-straight.css'>    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Eventos</title>
@@ -20,8 +21,16 @@
     <div class="contenedor">
         <h1>Eventos</h1>
         <div class="buscar">
+
+            <button class="btn-cerrar-sesion" onclick="window.location.href='{{ url_for('logout') }}'"><i class="fi fi-rs-sign-out-alt"></i></button>
+
             <input type="text" id="buscar-input" class="buscar-input" placeholder="Buscar evento...">
-            <button class="btn-agregar" onclick="window.location.href='{{ url_for('crearEvento') }}'" id="crear-evento-btn"><i class="fi fi-rr-add"></i></button>
+
+            {% if rol == 'Administrador' %}
+            <button class="btn-agregar" onclick="window.location.href='{{ url_for('crearEvento') }}'" id="crear-evento-btn">
+                <i class="fi fi-rr-add"></i>
+            </button>
+            {% endif %}
         </div>
 
         <ul id="lista-eventos" class="lista">
@@ -34,7 +43,9 @@
                         </div>
                         <div class="acciones">
                             <button class="btn-ver-detalles" onclick="window.location.href='{{ url_for('ver_detalles', evento_id=evento[0]) }}'">Detalles</button>
+                            {% if rol == 'Administrador' %}
                             <button class="btn-borrar" data-id="{{ evento[0] }}"><i class="fi fi-rr-trash"></i></button>
+                            {% endif %}
                         </div>
                     </li>
                 {% endfor %}

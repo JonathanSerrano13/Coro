@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (agregarBtn) {
         agregarBtn.addEventListener('click', function (e) {
             e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+
+            // Obtener las canciones seleccionadas
             const checkboxes = document.querySelectorAll('input[name="canciones"]:checked');
             const cancionesSeleccionadas = Array.from(checkboxes).map(cb => cb.value);
 
@@ -40,23 +42,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
+            // Hacer la petición AJAX
             fetch('/agregar_canciones', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ canciones: cancionesSeleccionadas })
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.href = `/lista_canciones`;
-                    } else {
-                        alert(data.error || 'Error al agregar canciones.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Ocurrió un error inesperado. Intenta nuevamente.');
-                });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Actualizar la lista de canciones en la página actual sin recargar
+                    const listaCanciones = document.getElementById('lista-canciones');
+                    listaCanciones.innerHTML = '';  // Limpiar la lista actual
+
+                    // Agregar las canciones nuevas
+                    data.canciones.forEach(cancion => {
+                        const li = document.createElement('li');
+                        li.textContent = cancion;
+                        listaCanciones.appendChild(li);
+                    });
+                } else {
+                    alert(data.error || 'Error al agregar canciones.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Ocurrió un error inesperado. Intenta nuevamente.');
+            });
         });
     }
 });

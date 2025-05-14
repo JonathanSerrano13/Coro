@@ -30,14 +30,21 @@ def home():
         user = cur.fetchone()
 
         if user:
-            session['user_id'] = user[0]
+            session['user_id'] = user[0]  # Guardar el ID del usuario
+            session['Rol'] = user[5]     # Asumimos que la columna 3 en la base de datos es el rol
+            cur.close()
             return redirect(url_for('eventos'))
         else:
             flash('Nombre o contraseña incorrectos', 'danger')
-
-        cur.close()
+            cur.close()
 
     return render_template('index.html')
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.pop('user_id', None)  # Elimina el user_id de la sesión
+    session.pop('Rol', None)  # Elimina el rol de la sesión, si también lo guardas
+    return redirect(url_for('home'))  # Redirige a la página de inicio
 
 # Ruta para la página de registro
 @app.route('/registro', methods=['GET', 'POST'])
@@ -63,7 +70,6 @@ def registro():
         mysql.connection.commit()
         cur.close()
 
-        flash('Registro exitoso.', 'success')
         return redirect(url_for('home'))  # Redirige al inicio de sesión
 
     return render_template('Register/Registro.html')
@@ -88,11 +94,14 @@ def eventos():
     eventos = cur.fetchall()
     cur.close()
 
+    # Obtener el rol del usuario desde la sesión
+    rol = session.get('Rol', 'Integrante')  # Por defecto 'integrante' si no está definido
+
     if request.args.get('ajax'):  # Si la solicitud es AJAX, devolver los eventos como JSON
         return jsonify(eventos)
 
-    # Si no es una solicitud AJAX, renderizar la plantilla HTML normal
-    return render_template('Eventos/Eventos.html', eventos=eventos)
+    # Renderizar la plantilla eventos.html con los datos y el rol del usuario
+    return render_template('Eventos/Eventos.html', eventos=eventos, rol=rol)
 
 
 # Ruta para crear un evento
