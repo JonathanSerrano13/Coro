@@ -18,28 +18,27 @@
 <body>
     <div class="contenedor">
         <h1>Canciones</h1>
-
+    <form method="POST" id="form-agregar-canciones">
         <div class="buscar-canciones">
             <button class="btn" onclick="window.location.href='{{ url_for('lista_canciones', temp_lista_id=temp_lista_id) }}'"><span class="material-symbols-outlined">chevron_left</span></button>
             <input type="text" id="busqueda" placeholder="Buscar canción">
-            <button type="guardarSeleccion" class="btn-agregar" id="btn-agregar" ><i class="fi fi-rr-add"></i></button>
+            <button type="submit" class="btn-agregar" id="btn-agregar" data-lista-id="{{ temp_lista_id }}" ><i class="fi fi-rr-add"></i></button>
         </div>
 
         <div class="lista">
             <ul id="lista-canciones">
                 {% for cancion in canciones %}
                 <li class="item">
-                    <input type="checkbox" name="canciones" id="cancion-{{ loop.index }}" value="{{ cancion }}">
-                    <label for="cancion-{{ loop.index }}">{{ cancion  }}</label>
+                    <input type="checkbox" name="canciones" value="{{ cancion.id }}">
+                    <label >{{ cancion.nombre  }}</label>
                 </li>
                 {% endfor %}
             </ul>
         </div>
+     </form>   
     </div>
 
-    <script>
-        var tempListaId = {{ temp_lista_id }};
-    </script>
+    <script>var tempListaId = {{ temp_lista_id | tojson }};</script>
 
     <script src="{{ url_for('static', filename='js/canciones.js') }}"></script>
 
