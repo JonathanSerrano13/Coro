@@ -143,55 +143,37 @@ def crearEvento():
         return redirect(url_for('eventos'))
     
     
-@app.route('/lista_canciones/<int:temp_lista_id>', methods=['GET', 'POST'])
+@app.route('/lista_canciones/<int:temp_lista_id>', methods=['GET'])
 def lista_canciones(temp_lista_id):
+    # Obtener la conexión a la base de datos
     cur = mysql.connection.cursor()
 
-    if request.method == 'GET':
-        # Recuperar las canciones asociadas a la lista en la tabla visualizacion
-        cur.execute("""
-            SELECT c.ID, c.Nombre, c.Partitura, c.Letra 
-            FROM visualizacion v
-            JOIN canciones c ON v.CancionID = c.ID
-            WHERE v.ListaCancionesID = %s
-        """, (temp_lista_id,))
-        canciones = cur.fetchall()
-        cur.close()
+    # Consulta para obtener las canciones relacionadas con temp_lista_id
+    cur.execute('SELECT * FROM canciones WHERE lista_id = %s', (temp_lista_id,))
+    canciones = cur.fetchall()  # Trae todas las canciones
 
-        # Renderizar la plantilla con las canciones de la lista
-        return render_template('ListaCanciones/listaCanciones.html', canciones=canciones, temp_lista_id=temp_lista_id)
+    # Cerrar la conexión
+    cur.close()
 
-    if request.method == 'POST':
-        # Recibir los IDs de canciones seleccionadas desde el frontend
-        canciones_ids = request.json.get('canciones', [])
-        if not canciones_ids:
-            flash('No se seleccionaron canciones.', 'error')
-            return redirect(url_for('lista_canciones', temp_lista_id=temp_lista_id))
+    return render_template('ListaCanciones/listaCanciones.html', canciones=canciones, temp_lista_id=temp_lista_id)
 
-        # Insertar las relaciones en la tabla visualizacion
-        for cancion_id in canciones_ids:
-            cur.execute("""
-                INSERT INTO visualizacion (CancionID, ListaCancionesID) 
-                VALUES (%s, %s)
-            """, (cancion_id, temp_lista_id))
-        mysql.connection.commit()
-        cur.close()
 
-        # Confirmar y redirigir
-        flash('Canciones agregadas exitosamente.', 'success')
-        return jsonify({'status': 'success'})  # Respuesta para el fetch en JS
-    
+
 # Ruta para canciones
-@app.route('/canciones', methods=['GET'])
+@app.route('/canciones', methods=['GET', 'POST'])
 def canciones():
     search_query = request.args.get('search', '')  # Obtén el término de búsqueda desde los parámetros de consulta
     cur = mysql.connection.cursor()
+    
+    # Obtener tanto el ID como el Nombre de las canciones
     if search_query:
-        query = "SELECT Nombre FROM canciones WHERE Nombre LIKE %s"
+        query = "SELECT ID, Nombre FROM canciones WHERE Nombre LIKE %s"
         cur.execute(query, ('%' + search_query + '%',))
     else:
-        cur.execute("SELECT Nombre FROM canciones")
-    canciones = [row[0] for row in cur.fetchall()]
+        cur.execute("SELECT ID, Nombre FROM canciones")
+    
+    # Crear una lista de diccionarios para usar en el HTML
+    canciones = [{'id': row[0], 'nombre': row[1]} for row in cur.fetchall()]
     cur.close()
     
     if request.args.get('ajax'):  # Si la solicitud es desde AJAX, devuelve JSON
@@ -209,22 +191,24 @@ def canciones():
 def agregar_canciones():
     try:
         data = request.get_json()
+        print(f"Datos recibidos: {data}")  # Ver qué datos llegan
+        canciones_seleccionadas = data.get('canciones', [])
+        temp_lista_id = data.get('temp_lista_id')
 
-        if not data or not 'canciones' in data:
-            return jsonify({'status': 'error', 'message': 'No se proporcionaron canciones.'}), 400
+        if not canciones_seleccionadas or not temp_lista_id:
+            return jsonify({'error': 'Faltan datos necesarios'}), 400
+        
+        for cancion_id in canciones_seleccionadas:
+            cursor = mysql.connection.cursor()
+            cursor.execute('INSERT INTO visualizacion (CancionID, ListaCancionesID) VALUES (%s, %s)', (cancion_id, temp_lista_id))
+            mysql.connection.commit()
+            cursor.close()
 
-        canciones_ids = data['canciones']
-
-        # Asegúrate de manejar la base de datos aquí correctamente
-        # Por ejemplo, inserta las canciones en la tabla `visualizacion`...
-
-        return jsonify({'status': 'success', 'message': 'Canciones agregadas correctamente.'}), 200
+        return jsonify({'success': True})
     except Exception as e:
-        # Log de error para facilitar la depuración
-        app.logger.error(f"Error: {e}")
-        return jsonify({'status': 'error', 'message': 'Ocurrió un error en el servidor.'}), 500
-
-
+        # Capturar el error y mostrarlo en el log
+        print(f"Error al agregar canciones: {str(e)}")
+        return jsonify({'error': 'Hubo un problema al agregar las canciones'}), 500
 
 # Ruta para eliminar una canción
 @app.route('/eliminar_cancion/<int:cancion_id>', methods=['DELETE'])
