@@ -33,7 +33,7 @@
                 <div class="acciones">
                     <button type="button" onclick="window.location.href='/eventos'" id="regresar-btn">Regresar</button>
                     <button type="submit" id="guardar-btn">Guardar</button>
-                    <button type="button" id="ver-canciones-btn" onclick="window.location.href='{{ url_for('lista_canciones', temp_lista_id=session.get("temp_lista_id", 0)) }}'">Canciones</button>
+                    <button type="button" id="ver-canciones-btn" onclick="window.location.href='{{ url_for('lista_canciones_agregadas', evento_id=evento_id) }}'">Canciones</button>
                 </div>
             </div>
         </form>

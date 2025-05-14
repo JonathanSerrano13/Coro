@@ -125,7 +125,7 @@ def crearEvento():
         cursor.close()
 
         flash('Evento creado con éxito.')
-        return redirect(url_for('crearEvento'))
+        return redirect(url_for('eventos'))
     
     return render_template('CrearEvento/crearEvento.html')  # Si es GET, renderiza el formulario
 
@@ -218,23 +218,63 @@ def eliminarCancion(cancion_id):
 
 
 # Ruta para ver detalles del evento
-@app.route('/ver_detalles/<int:evento_id>', methods=['GET', 'POST'])
+@app.route('/verDetalles/<int:evento_id>', methods=['GET', 'POST'])
 def ver_detalles(evento_id):
-    if 'user_id' not in session:
-        return redirect(url_for('home'))
+    cursor = mysql.connection.cursor()
 
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM evento WHERE id = %s", (evento_id,))
-    evento = cur.fetchone()
-    cur.close()
+    # Obtener los detalles del evento
+    cursor.execute("SELECT * FROM evento WHERE ID = %s", (evento_id,))
+    evento = cursor.fetchone()
 
-    if evento:
-        fecha_formateada = evento[2].strftime('%Y-%m-%d')
-        hora_formateada = evento[2].strftime('%H:%M:%S')
-        return render_template('VerDetalles/verDetalles.html', evento=evento, fecha=fecha_formateada, hora=hora_formateada)
-    else:
-        flash('Evento no encontrado', 'danger')
-        return redirect(url_for('eventos'))
+    # Separar fecha y hora
+    fecha_hora = evento[2]
+    fecha = fecha_hora.strftime('%Y-%m-%d') if fecha_hora else ''
+    hora = fecha_hora.strftime('%H:%M') if fecha_hora else ''
+
+    # Obtener canciones asociadas al evento
+    cursor.execute("""
+        SELECT c.ID, c.Nombre 
+        FROM canciones c
+        INNER JOIN visualizacion v ON c.ID = v.CancionID
+        INNER JOIN listaCanciones lc ON v.ListaCancionesID = lc.ID
+        WHERE lc.EventoID = %s;
+    """, (evento_id,))
+    canciones = cursor.fetchall()
+
+    cursor.close()
+
+    return render_template(
+        'VerDetalles/verDetalles.html',
+        evento=evento,
+        fecha=fecha,
+        hora=hora,
+        canciones=canciones,
+        evento_id=evento_id  # Asegúrate de pasar el evento_id a la plantilla
+    )
+    
+@app.route('/listaCancionesAgregadas/<int:evento_id>', methods=['GET'])
+def lista_canciones_agregadas(evento_id):
+    cursor = mysql.connection.cursor()
+
+    # Obtener canciones asociadas al evento
+    cursor.execute("""
+        SELECT c.ID, c.Nombre
+        FROM canciones c
+        INNER JOIN visualizacion v ON c.ID = v.CancionID
+        INNER JOIN listaCanciones lc ON v.ListaCancionesID = lc.ID
+        WHERE lc.EventoID = %s;
+    """, (evento_id,))
+    canciones = cursor.fetchall()
+
+    cursor.close()
+
+    return render_template(
+        'ListaCancionesAgregadas/listaCancionesAgregadas.html',
+        canciones=canciones,
+        evento_id=evento_id  # Pasar el evento_id a la plantilla
+    )
+    
+    
     
 # Ruta para eliminar un evento@app.route('/borrar_evento/<int:evento_id>', methods=['POST'])
 @app.route('/borrar_evento/<int:evento_id>', methods=['DELETE'])
