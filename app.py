@@ -94,95 +94,55 @@ def eventos():
     # Si no es una solicitud AJAX, renderizar la plantilla HTML normal
     return render_template('Eventos/Eventos.html', eventos=eventos)
 
+
 # Ruta para crear un evento
 @app.route('/crearEvento', methods=['GET', 'POST'])
 def crearEvento():
-    if 'user_id' not in session:
-        return redirect(url_for('home'))
-
-    cur = mysql.connection.cursor()
-
-    if request.method == 'GET':
-        # Crear lista temporal si no existe
-        if 'temp_lista_id' not in session:
-            cur.execute("INSERT INTO listaCanciones (EventoID) VALUES (NULL)")
-            mysql.connection.commit()
-            cur.execute("SELECT LAST_INSERT_ID()")
-            session['temp_lista_id'] = cur.fetchone()[0]
-
-        return render_template('CrearEvento/crearEvento.html')
-
     if request.method == 'POST':
-        # Guardar el evento
         nombre_evento = request.form['nombre_evento']
-        fecha = request.form['fecha']
-        hora = request.form['hora']
-        ubicacion = request.form['ubicacion']
-        descripcion = request.form['descripcion']
-        temp_lista_id = session.get('temp_lista_id')
+        cursor = mysql.connection.cursor()
+        cursor.execute("INSERT INTO eventos (Nombre) VALUES (%s)", (nombre_evento,))
+        evento_id = cursor.lastrowid
 
-        cur.execute("""
-            INSERT INTO evento (Nombre, FechaHora, Ubicacion, Descripcion) 
-            VALUES (%s, %s, %s, %s)
-        """, (nombre_evento, f"{fecha} {hora}", ubicacion, descripcion))
+        # Asociar la lista de canciones al evento
+        cursor.execute("UPDATE listaCanciones SET EventoID = %s WHERE EventoID IS NULL", (evento_id,))
         mysql.connection.commit()
+        flash('Evento creado con éxito.')
+        return redirect(url_for('crear_evento'))
 
-        cur.execute("SELECT LAST_INSERT_ID()")
-        evento_id = cur.fetchone()[0]
-        cur.execute("""
-            UPDATE listaCanciones 
-            SET EventoID = %s 
-            WHERE ID = %s
-        """, (evento_id, temp_lista_id))
-        mysql.connection.commit()
+    return render_template('CrearEvento/crearEvento.html')
 
-        # Limpiar lista temporal
-        session.pop('temp_lista_id', None)
-
-        flash('Evento creado exitosamente.', 'success')
-        return redirect(url_for('eventos'))
-    
-    
-@app.route('/lista_canciones/<int:temp_lista_id>', methods=['GET'])
-def lista_canciones(temp_lista_id):
-    # Obtener la conexión a la base de datos
-    cur = mysql.connection.cursor()
-
-    # Consulta para obtener las canciones relacionadas con temp_lista_id
-    cur.execute('SELECT * FROM canciones WHERE lista_id = %s', (temp_lista_id,))
-    canciones = cur.fetchall()  # Trae todas las canciones
-
-    # Cerrar la conexión
-    cur.close()
-
-    return render_template('ListaCanciones/listaCanciones.html', canciones=canciones, temp_lista_id=temp_lista_id)
+ 
+# Visualizar la lista de canciones    
+@app.route('/listaCanciones')
+def lista_canciones():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM listaCanciones WHERE EventoID IS NULL")
+    canciones = cursor.fetchall()
+    return render_template('ListaCanciones/listaCanciones.html', canciones=canciones)
 
 
 
 # Ruta para canciones
-@app.route('/canciones', methods=['GET', 'POST'])
+@app.route('/canciones')
 def canciones():
-    search_query = request.args.get('search', '')  # Obtén el término de búsqueda desde los parámetros de consulta
-    cur = mysql.connection.cursor()
-    
-    # Obtener tanto el ID como el Nombre de las canciones
-    if search_query:
-        query = "SELECT ID, Nombre FROM canciones WHERE Nombre LIKE %s"
-        cur.execute(query, ('%' + search_query + '%',))
-    else:
-        cur.execute("SELECT ID, Nombre FROM canciones")
-    
-    # Crear una lista de diccionarios para usar en el HTML
-    canciones = [{'id': row[0], 'nombre': row[1]} for row in cur.fetchall()]
-    cur.close()
-    
-    if request.args.get('ajax'):  # Si la solicitud es desde AJAX, devuelve JSON
-        return jsonify(canciones)
-    
-    temp_id = session.get('temp_lista_id')  # Asegúrate de que temp_lista_id esté en sesión
-    return render_template('Canciones/Canciones.html',
-                           canciones=canciones,
-                           temp_lista_id=temp_id)
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT ID, Nombre FROM canciones")
+    canciones = cursor.fetchall()  # Esto devuelve una lista de tuplas [(id, nombre), ...]
+
+    # Verifica si la consulta devuelve las canciones correctamente
+    print(canciones)
+
+    return render_template('Canciones/canciones.html', canciones=canciones)
+
+# Eliminar lista temporal si se cancela el evento
+@app.route('/cancelarEvento', methods=['POST'])
+def cancelar_evento():
+    cursor = mysql.connection.cursor()
+    cursor.execute("DELETE FROM listaCanciones WHERE EventoID IS NULL")
+    mysql.connection.commit()
+    flash('Evento cancelado y lista eliminada.')
+    return redirect(url_for('crearEvento'))
     
     
 
@@ -190,24 +150,21 @@ def canciones():
 @app.route('/agregar_canciones', methods=['POST'])
 def agregar_canciones():
     try:
-        data = request.get_json()
-        print(f"Datos recibidos: {data}")  # Ver qué datos llegan
-        canciones_seleccionadas = data.get('canciones', [])
-        temp_lista_id = data.get('temp_lista_id')
+        canciones_seleccionadas = request.form.getlist('canciones')
+        evento_id = request.form.get('evento_id')  # Pasar evento_id en el formulario
 
-        if not canciones_seleccionadas or not temp_lista_id:
+        if not canciones_seleccionadas or not evento_id:
             return jsonify({'error': 'Faltan datos necesarios'}), 400
-        
+
+        cursor = mysql.connection.cursor()
         for cancion_id in canciones_seleccionadas:
-            cursor = mysql.connection.cursor()
-            cursor.execute('INSERT INTO visualizacion (CancionID, ListaCancionesID) VALUES (%s, %s)', (cancion_id, temp_lista_id))
-            mysql.connection.commit()
-            cursor.close()
+            cursor.execute('INSERT INTO visualizacion (CancionID, ListaCancionesID) VALUES (%s, %s)', (cancion_id, evento_id))
+        mysql.connection.commit()
+        cursor.close()
 
         return jsonify({'success': True})
     except Exception as e:
-        # Capturar el error y mostrarlo en el log
-        print(f"Error al agregar canciones: {str(e)}")
+        print(f"Error: {e}")
         return jsonify({'error': 'Hubo un problema al agregar las canciones'}), 500
 
 # Ruta para eliminar una canción
