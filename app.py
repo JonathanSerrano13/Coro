@@ -311,24 +311,6 @@ def editar_evento(evento_id):
     return redirect(url_for('eventos'))
 
 
-@app.route('/crear_lista_temporal', methods=['POST'])
-def crear_lista_temporal():
-    cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO lista_canciones (EventoID) VALUES (NULL)")
-    mysql.connection.commit()
-    temp_lista_id = cur.lastrowid
-    cur.close()
-    return jsonify({'temp_lista_id': temp_lista_id})
-
-
-@app.route('/eliminar_listas_temporales', methods=['POST'])
-def eliminar_listas_temporales():
-    cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM lista_canciones WHERE EventoID IS NULL")
-    mysql.connection.commit()
-    cur.close()
-    return jsonify({'status': 'success'})
-
 
 if __name__ == '__main__':
     app.run(debug=True)
