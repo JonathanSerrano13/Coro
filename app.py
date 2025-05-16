@@ -105,8 +105,14 @@ def eventos():
 
 
 # Ruta para crear un evento
-@app.route('/crearEvento', methods=['GET','POST'])
+@app.route('/crearEvento', methods=['GET', 'POST'])
 def crearEvento():
+    # Verificar si el usuario tiene un rol válido para crear eventos
+    rol = session.get('Rol', 'Integrante')  # Obtén el rol de la sesión, por defecto 'Integrante'
+    if rol not in ['Administrador']:  # Ajusta según los roles que pueden crear eventos
+        flash('No tienes permisos para crear eventos.')
+        return redirect(url_for('eventos'))  # Redirige al listado de eventos o a otra página autorizada
+
     if request.method == 'POST':
         # Obtener los datos del formulario
         nombre_evento = request.form['nombre_evento']
@@ -132,16 +138,17 @@ def crearEvento():
         cursor.execute("UPDATE listaCanciones SET EventoID = %s WHERE EventoID IS NULL", (evento_id,))
         mysql.connection.commit()
         cursor.close()
-
+        
         flash('Evento creado con éxito.')
         return redirect(url_for('eventos'))
     
-    return render_template('CrearEvento/crearEvento.html')  # Si es GET, renderiza el formulario
+    return render_template('CrearEvento/crearEvento.html', rol=rol)  # Si es GET, renderiza el formulario
+
 
 
  
 # Visualizar la lista de canciones    
-@app.route('/listaCanciones')
+@app.route('/listaCanciones', methods=['GET'])
 def lista_canciones():
     try:
         cursor = mysql.connection.cursor()
@@ -162,7 +169,7 @@ def lista_canciones():
 
 
 # Ruta para canciones
-@app.route('/canciones', methods=['GET', 'POST'])
+@app.route('/Canciones', methods=['GET', 'POST'])
 def canciones():
     if request.method == 'POST':
         try:
@@ -176,7 +183,7 @@ def canciones():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT ID, Nombre FROM canciones")
     canciones = cursor.fetchall()
-    return render_template('Canciones/canciones.html', canciones=canciones)
+    return render_template('Canciones/Canciones.html', canciones=canciones)
 
 # Eliminar lista temporal si se cancela el evento
 @app.route('/cancelarEvento', methods=['POST'])
@@ -252,13 +259,16 @@ def ver_detalles(evento_id):
 
     cursor.close()
 
+    rol = session.get('Rol', 'Integrante')  # Obtener rol de sesión o poner por defecto 'Integrante'
+
     return render_template(
         'VerDetalles/verDetalles.html',
         evento=evento,
         fecha=fecha,
         hora=hora,
         canciones=canciones,
-        evento_id=evento_id  # Asegúrate de pasar el evento_id a la plantilla
+        evento_id=evento_id,
+        rol=rol  # Pasar el rol a la plantilla
     )
     
 @app.route('/listaCancionesAgregadas/<int:evento_id>', methods=['GET'])
@@ -339,7 +349,6 @@ def editar_evento(evento_id):
 
     flash('Evento actualizado exitosamente', 'success')
     return redirect(url_for('eventos'))
-
 
 
 if __name__ == '__main__':

@@ -112,3 +112,20 @@ document.getElementById('buscar-input').addEventListener('input', function() {
             console.error('Error al obtener los eventos:', error);
         });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/limpiar_listas_temporales', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Listas temporales eliminadas correctamente.');
+        } else {
+            console.error('Error al limpiar listas temporales:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});

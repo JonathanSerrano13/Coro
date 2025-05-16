@@ -33,14 +33,16 @@
                 <div class="acciones">
                     <button type="button" onclick="window.location.href='{{ url_for('eventos') }}'">Regresar</button>
                     <button type="button" onclick="window.location.href='{{ url_for('lista_canciones') }}'">Canciones</button>
+
                      {% if rol == 'Administrador' %}
                     <button type="submit">Crear</button>
+                    {% endif %}
                 </div>
             </div>
     </form>
 
 
-    <script src="crearEvento.js"></script>
+    <script></script>
 </body>
 
 </html>

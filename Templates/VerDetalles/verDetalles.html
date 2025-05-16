@@ -16,23 +16,25 @@
                 <h1>Detalles del Evento</h1>
 
                 <label for="Nombre_Evento">Nombre del evento:</label>
-                <input type="text" id="Nombre_Evento" name="nombre_evento" value="{{ evento[1] }}" required>
+                <input type="text" id="Nombre_Evento" name="nombre_evento" value="{{ evento[1] }}"  {% if rol != 'Administrador' %}disabled{% endif %} required>
 
                 <label for="fecha">Fecha:</label>
-                <input type="date" id="fecha" name="fecha" value="{{ fecha }}" required>
+                <input type="date" id="fecha" name="fecha" value="{{ fecha }}"  {% if rol != 'Administrador' %}disabled{% endif %} required>
 
                 <label for="hora">Hora:</label>
-                <input type="time" id="hora" name="hora" value="{{ hora }}" required>
+                <input type="time" id="hora" name="hora" value="{{ hora }}"  {% if rol != 'Administrador' %}disabled{% endif %} required>
 
                 <label for="Ubicacion">Ubicación:</label>
-                <input type="text" id="Ubicacion" name="ubicacion" value="{{ evento[3] }}" required>
+                <input type="text" id="Ubicacion" name="ubicacion" value="{{ evento[3] }}"  {% if rol != 'Administrador' %}disabled{% endif %} required>
 
                 <label for="Descripcion">Descripción:</label>
-                <textarea id="Descripcion" name="descripcion" rows="3" >{{ evento[4] }}</textarea>
+                <textarea id="Descripcion" name="descripcion" rows="3"   {% if rol != 'Administrador' %}disabled{% endif %} >{{ evento[4] }}</textarea>
 
                 <div class="acciones">
                     <button type="button" onclick="window.location.href='/eventos'" id="regresar-btn">Regresar</button>
+                      {% if rol == 'Administrador' %}
                     <button type="submit" id="guardar-btn">Guardar</button>
+                        {% endif %}
                     <button type="button" id="ver-canciones-btn" onclick="window.location.href='{{ url_for('lista_canciones_agregadas', evento_id=evento_id) }}'">Canciones</button>
                 </div>
             </div>
