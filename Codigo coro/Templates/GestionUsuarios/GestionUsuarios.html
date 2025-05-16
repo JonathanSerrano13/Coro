@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Usuarios</title>
+</head>
+<body>
+    <h1>Gestionar Integrantes</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Rol</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for integrante in integrantes %}
+            <tr>
+                <td>{{ integrante['ID'] }}</td>
+                <td>{{ integrante['Nombre'] }}</td>
+                <td>{{ integrante['Email'] }}</td>
+                <td>{{ integrante['Telefono'] }}</td>
+                <td>
+                    <form action="/cambiar_rol" method="POST">
+                        <input type="hidden" name="id" value="{{ integrante['ID'] }}">
+                        <select name="nuevo_rol">
+                            <option value="Administrador" {% if integrante['Rol'] == 'Administrador' %}selected{% endif %}>Administrador</option>
+                            <option value="Integrante" {% if integrante['Rol'] == 'Integrante' %}selected{% endif %}>Integrante</option>
+                        </select>
+                        <button type="submit">Cambiar Rol</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
