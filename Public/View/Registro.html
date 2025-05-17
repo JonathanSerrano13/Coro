@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Registro</title>
+    <link rel="stylesheet" href="../css/registro.css">
+</head>
+
+<body>
+
+    <div class="contenedor">
+        <div class="logo">
+            <img src="/images/logo parroquia.png" alt="Logo">
+        </div>
+        <h1>Regístrate</h1>
+        <form id="registroForm" action="/registro" method="POST">
+            <div class="fields">
+                <div class="field">
+                    <label for="nombre">NOMBRE</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
+                </div>
+                <div class="field">
+                    <label for="email">CORREO ELECTRÓNICO</label>
+                    <input type="email" id="email" name="email" placeholder="Ingresa tu correo electrónico" required>
+                </div>
+                <div class="field">
+                    <label for="telefono">TELEFONO</label>
+                    <input type="number" id="telefono" name="telefono" placeholder="Ingresa tu teléfono" required>
+                </div>
+                <div class="field">
+                    <label for="password">CONTRASEÑA</label>
+                    <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+                </div>
+                <div class="field">
+                    <label for="rol">ROL</label>
+                    <select id="rol" name="rol" required>
+                        <option value="Administrador">Administrador</option>
+                        <option value="Integrante">Integrante</option>
+                    </select>
+                </div>
+            </div>
+            <div class="actions">
+                <button type="button" class="btn" onclick="window.location.href='../index.html'">Volver</button>
+                <button type="submit" class="btn">Registrar</button>
+            </div>
+        </form>
+    </div>
+    
+
+    <script src="../js/registro.js"></script>
+</body>
+
+</html>

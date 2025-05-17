@@ -1,0 +1,106 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffffff, #e8bea8, #b57a68);
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.contenedor {
+    width: 90%;
+    max-width: 500px;
+    padding: 0 20px 0 20px;
+}
+
+h1 {
+    font-family: 'Bree Serif', serif;
+    text-align: center;
+    color: #8f6e5b;
+    margin-bottom: 20px;
+    font-size: 40px;
+}
+
+
+label {
+    display: block;
+    color: #4d4c4c;
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+input,
+textarea {
+    width: 95%;
+    padding: 13px;
+    margin-top: 5px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    background-color: rgba(255, 255, 255, 0.6);
+    color: black;
+    transition: 0.3s;
+}
+
+.doble {
+    gap: 10px;
+}
+
+.doble input {
+    flex: 1;
+}
+
+.btnMapa {
+    text-align: end;
+    margin-top: 5px;
+    border: none;
+}
+
+.btnMapa button {
+    margin-top: 5px;
+    border: none;
+    padding: 10px 30px 10px 30px;
+    border-radius: 10px;
+    cursor:pointer;
+}
+
+.btnMapa button:hover{
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+
+
+.acciones {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.acciones button {
+    flex: 0.5;
+    margin: 5px;
+    padding: 15px;
+    background-color: #6d4c41;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.acciones button:hover {
+    background-color: #8c6b62;
+}
+
+
+@media (max-height: 600px) {
+    .contenedor {
+        max-height: 90vh;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+}

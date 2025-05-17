@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crear Evento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/crearEvento.css">
+</head>
+
+<body>
+
+    <div class="contenedor">
+        <h1>Crear evento</h1>
+
+        <form id="form-crear-evento" method="POST" action="crearEvento">
+            <label for="nombre_evento">Nombre del evento:</label>
+            <input type="text" id="nombre_evento" name="nombre_evento" placeholder="Nombre del evento" required>
+
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required>
+
+            <label for="hora">Hora:</label>
+            <input type="time" id="hora" name="hora" required>
+
+            <label for="ubicacion">Ubicación:</label>
+            <input type="text" id="ubicacion" name="ubicacion" placeholder="Dirección del evento" required>
+            <div class="btnMapa">
+                <button type="button" onclick="abrirGoogleMaps()">Mapa</button>
+            </div>
+
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="3" placeholder="Descripción del evento..."></textarea>
+
+            <div class="acciones">
+                <button type="button" onclick="window.location.href='Eventos.html'">Regresar</button>
+                <button type="button" onclick="window.location.href='listaCanciones.html'">Canciones</button>
+                <button type="submit">Crear</button>
+            </div>
+        </form>
+    </div>
+
+
+    <script src="../js/crearEvento.js"></script>
+
+</body>
+
+</html>

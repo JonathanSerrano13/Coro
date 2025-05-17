@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Detalles del Evento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/verDetalles.css">
+</head>
+
+<body>
+
+    <div class="contenedor">
+        <h1>Detalles del Evento</h1>
+
+        <form id="detalles-evento-form" method="POST" action="detallesEvento">
+            <label for="Nombre_Evento">Nombre del evento:</label>
+            <input type="text" id="Nombre_Evento" name="nombre_evento"  required>
+
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required>
+
+            <label for="hora">Hora:</label>
+            <input type="time" id="hora" name="hora" required>
+
+            <label for="Ubicacion">Ubicación:</label>
+            <input type="text" id="Ubicacion" name="ubicacion"  required>
+
+            <label for="Descripcion">Descripción:</label>
+            <textarea id="Descripcion" name="descripcion" rows="3"></textarea>
+
+            <div class="acciones">
+                <button type="button" onclick="window.location.href='Eventos.html'" id="regresar-btn">Regresar</button>
+
+                <button type="submit" id="guardar-btn">Guardar</button>
+
+                <button type="button" id="ver-canciones-btn"
+                    onclick="window.location.href='listaCancionesAgregadas.html'"">Canciones</button>
+                </div>
+            </div>
+        </form>
+
+
+    <script src="../js/verDetalles.js"></script>
+
+</body>
+
+</html>

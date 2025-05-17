@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Canciones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link rel='stylesheet'
+        href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+        <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=chevron_left" />
+        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+        <link rel="stylesheet" href="/css/listaCanciones.css">
+</head>
+
+<body>
+    <div class="contenedor">
+        <h1>Lista de Canciones</h1>
+
+        <div class="buscar-canciones">
+            <button class="btn" onclick="window.location.href='crearEvento.html'"><span class="material-symbols-outlined">chevron_left</span></button>
+            <button class="btn-canciones-disponibles" onclick="window.location.href='Canciones.html'"><i class="fi fi-ss-list-music"></i></button>
+        </div>
+
+        <div class="lista">
+            <ul id="lista-canciones">
+                  <li class="item">
+                    <span class="icono">♦</span>
+                    <div class="info-evento">
+                        <label>Ejemplo cancion 1</label>
+                    </div>
+                    <div class="acciones">
+                        <button class="btn-borrar"><i class="fi fi-rr-trash"></i></button>
+                    </div>
+                </li>
+                <!-- Aqui se mostraran las canciones-->
+            </ul>
+        </div>
+    </div>
+
+    <script >"listaCanciones.js"</script>
+
+</body>
+
+</html>

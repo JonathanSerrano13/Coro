@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffffff, #e8bea8, #b57a68);
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}   
+
+h1 {
+  font-size: 40px;
+  font-family: 'Bree Serif', sans-serif;
+  color: #8f6e5b;
+  text-align: center;
+}
+
+.contenedor {
+    width: 95%;
+    max-width: 500px;
+}
+
+.buscar-canciones {
+    display: flex;
+    margin-bottom: 25px;
+    gap: 5px;
+    justify-content: space-between;
+}
+
+.buscar-canciones input {
+    flex: 1;
+    padding:15px;
+    border-radius: 18px;
+    border: 1px solid #d4a593;
+    font-size: 14px;
+}
+
+.buscar-canciones input:focus {
+    border-color: #6b4a3d;
+}
+
+.btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.btn:hover,.btn-agregar:hover,.btn-canciones-disponibles:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+}
+
+.btn-agregar, .btn-canciones-disponibles {
+    background: none;
+    margin-top: 5px;
+    font-size: 35px;
+    height: 42px;
+    border: none;
+}
+
+.item {
+  display: flex ;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  transition: 0.3s;  
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+#lista-canciones {
+
+    padding: 5px;
+}
+
+#lista-canciones li:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-height: 600px) {
+    .contenedor {
+      max-height: 90vh;
+    }
+    
+    h1 {
+      font-size: 28px;
+    }
+  }
